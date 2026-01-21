@@ -6,7 +6,7 @@ Fixed to properly load features based on Charts_dataset.xlsx mapping
 import os
 import pandas as pd
 import numpy as np
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, send_from_directory
 from flask_cors import CORS
 from datetime import datetime, timedelta
 import rarfile
@@ -16,8 +16,8 @@ import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-app = Flask(__name__)
-CORS(app, origins=["http://localhost:3000", "http://127.0.0.1:3000"])
+app = Flask(__name__, static_folder='dist', static_url_path='')
+CORS(app)  # Allow all origins for tunneling
 
 # ------------------------------------------------------------------
 # 1. PATHS - Local Dataset Only
@@ -499,6 +499,18 @@ def get_symbol_ohlc(symbol, timeframe='1D'):
 # ------------------------------------------------------------------
 # 7. API ROUTES - UPDATED FOR DYNAMIC FEATURES
 # ------------------------------------------------------------------
+@app.route('/')
+def serve():
+    """Serve React App"""
+    return send_from_directory(app.static_folder, 'index.html')
+
+@app.route('/<path:path>')
+def static_proxy(path):
+    """Serve static files or fallback to index.html"""
+    if os.path.exists(os.path.join(app.static_folder, path)):
+        return send_from_directory(app.static_folder, path)
+    return send_from_directory(app.static_folder, 'index.html')
+
 @app.route('/api/symbols')
 def get_symbols():
     """Get available symbols from local dataset"""
