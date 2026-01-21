@@ -7,7 +7,8 @@ A professional trading dashboard featuring dynamic feature loading, charts, and 
 TradePro Dashboard is a full-stack application designed for visualizing trading data. It consists of:
 - **Backend**: A Flask-based Python server that processes data from a local file based dataset (`Server/` directory) and maps features dynamically using an Excel configuration file (`Charts_dataset.xlsx`).
 - **Frontend**: A React-based single-page application (SPA) built with Vite and Tailwind CSS, featuring interactive Plotly charts.
-- **Live Demo**: [https://lovely-actors-lie.loca.lt](https://lovely-actors-lie.loca.lt) (Requires local server running)
+- **Live Demo**: [https://major-donkeys-deny.loca.lt](https://major-donkeys-deny.loca.lt) (Requires local server running)
+- **Data Source**: This dashboard uses **Local Data** derived from the `Server/` directory. It does not fetch real-time market data from external APIs.
 
 ## Features
 

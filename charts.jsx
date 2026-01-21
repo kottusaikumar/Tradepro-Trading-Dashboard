@@ -13,15 +13,41 @@ function calculateIndicators(ohlc) {
   const volumes = ohlc.volume || []
 
   // VWAP
-  const vwap = []
-  if (volumes.length > 0) {
+  let vwap = []
+  // Ensure volumes exist and match length
+  const hasVolumes = volumes && volumes.length === closes.length
+
+  // Use backend VWAP if available and frontend calc not possible, or calculate if volumes exist
+  if (ohlc.vwap && ohlc.vwap.length === closes.length && !hasVolumes) {
+    // Fallback to backend VWAP if no volume data for recalc
+    vwap = ohlc.vwap
+  } else if (hasVolumes) {
     let cumulativeTPV = 0
     let cumulativeVolume = 0
+    let currentDayEntry = null
+
     for (let i = 0; i < closes.length; i++) {
+      try {
+        const dateStr = ohlc.index[i]
+        const date = new Date(dateStr)
+        // Use simple string comparison for day change to handle various formats
+        const dayStr = date.toDateString()
+
+        if (currentDayEntry !== dayStr) {
+          cumulativeTPV = 0
+          cumulativeVolume = 0
+          currentDayEntry = dayStr
+        }
+      } catch (e) {
+        // If date parsing fails, just continue identifying as same day or don't reset
+      }
+
       const typicalPrice = (highs[i] + lows[i] + closes[i]) / 3
-      const tpv = typicalPrice * (volumes[i] || 0)
+      const vol = volumes[i] || 0
+      const tpv = typicalPrice * vol
       cumulativeTPV += tpv
-      cumulativeVolume += volumes[i] || 0
+      cumulativeVolume += vol
+
       vwap.push(cumulativeVolume > 0 ? cumulativeTPV / cumulativeVolume : closes[i])
     }
   }
@@ -201,7 +227,7 @@ export const ChartComponent = ({
         showlegend: false,
         hovertemplate: `<b>${features.feature_labels?.[currentPane1] || currentPane1}</b><br>%{y:.2f}<extra></extra>`,
       })
-    } 
+    }
     const layout = {
       paper_bgcolor: isDarkTheme ? "#0a0a0a" : "#ffffff",
       plot_bgcolor: isDarkTheme ? "#0a0a0a" : "#ffffff",
@@ -222,7 +248,7 @@ export const ChartComponent = ({
         color: isDarkTheme ? "#ccc" : "#666",
         side: "right",
         domain: [0., 1],  // ⬆️ Main chart gets more space
-  // approx 71.5% height
+        // approx 71.5% height
         title: { text: "Price (₹)", font: { size: 10 } },
       },
       yaxis2: {
@@ -377,7 +403,6 @@ export const ChartComponent = ({
                 className="p-2 rounded transition-all duration-200 hover:scale-105"
                 title={tool.label}
                 aria-pressed={false}
-                disabled
               >
                 <IconComponent />
               </button>

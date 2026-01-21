@@ -1,6 +1,7 @@
 "use client"
 import { useState, useEffect } from "react"
 import { createRoot } from "react-dom/client"
+import "./index.css"
 import { APIClient, Storage } from "./utils.js"
 import { Header, Sidebar, BottomPanel } from "./components.jsx"
 import { ChartComponent } from "./charts.jsx"
@@ -193,11 +194,10 @@ const App = () => {
         {chartTypes.map(ct => (
           <button
             key={ct.value}
-            className={`px-1.5 py-1 rounded font-medium text-xs transition-colors ${
-              chartType === ct.value
+            className={`px-1.5 py-1 rounded font-medium text-xs transition-colors ${chartType === ct.value
                 ? "bg-primary text-black shadow-glow"
                 : "text-gray-400 hover:text-white hover:bg-accent-700"
-            }`}
+              }`}
             onClick={() => handleChartTypeChange(ct.value)}
             style={{ minWidth: 62, maxWidth: 96, outline: "none" }}
           >
