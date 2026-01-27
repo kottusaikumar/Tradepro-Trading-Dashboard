@@ -4,7 +4,7 @@
 
 @layer base {
   body {
-    @apply antialiased font-sans text-gray-900 bg-white;
+    @apply antialiased font-sans;
     font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
   }
 }

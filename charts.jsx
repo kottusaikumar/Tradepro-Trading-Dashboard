@@ -2,7 +2,14 @@
 
 import { useRef } from "react"
 import Plot from "react-plotly.js"
-import { MousePointer, Minus, TrendingUp, Star, Maximize, Settings, Sun, Moon } from "./icons.jsx"
+import { MousePointer, Minus, TrendingUp, Star, Maximize, Settings, Sun, Moon, BarChart3, Activity } from "./icons.jsx"
+
+const chartTypes = [
+  { value: "candlestick", label: "Candles", icon: BarChart3 },
+  { value: "line", label: "Line", icon: Activity },
+  { value: "area", label: "Area", icon: TrendingUp },
+  { value: "scatter", label: "Scatter", icon: Star },
+]
 
 // Technical indicator calculations
 function calculateIndicators(ohlc) {
@@ -408,6 +415,26 @@ export const ChartComponent = ({
               </button>
             )
           })}
+          <div className={`w-px h-6 ${isDarkTheme ? "bg-accent-700" : "bg-gray-300"} mx-2`} />
+
+          {/* Chart Types */}
+          <div className="flex items-center space-x-1 mr-2">
+            {chartTypes.map((ct) => (
+              <button
+                key={ct.value}
+                onClick={() => onChartTypeChange(ct.value)}
+                className={`px-2 py-1 text-xs rounded transition-colors ${chartType === ct.value
+                  ? "bg-[#00d4aa] text-white"
+                  : `${isDarkTheme ? "text-gray-400 hover:text-white hover:bg-accent-700" : "text-gray-600 hover:text-black hover:bg-gray-200"}`
+                  }`}
+                title={ct.label}
+              >
+                {ct.label}
+              </button>
+            ))}
+          </div>
+
+          <div className={`w-px h-6 ${isDarkTheme ? "bg-accent-700" : "bg-gray-300"} mx-2`} />
           <div className={`w-px h-6 ${isDarkTheme ? "bg-accent-700" : "bg-gray-300"} mx-2`} />
           {indicators.map((indicator) => (
             <button

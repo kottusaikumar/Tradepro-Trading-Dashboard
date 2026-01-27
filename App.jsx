@@ -187,24 +187,7 @@ const App = () => {
   return (
     <div className={`h-screen flex flex-col overflow-hidden ${isDarkTheme ? "bg-dark text-white" : "bg-white text-black"}`}>
       {/* Chart type buttons (now more compact!) */}
-      <div
-        className={`flex items-center overflow-x-auto space-x-1 scrollbar-thin bg-secondary-900 rounded px-2 py-1 border border-accent-700`}
-        style={{ maxWidth: 320, position: "absolute", top: 12, right: 24, zIndex: 40 }}
-      >
-        {chartTypes.map(ct => (
-          <button
-            key={ct.value}
-            className={`px-1.5 py-1 rounded font-medium text-xs transition-colors ${chartType === ct.value
-                ? "bg-primary text-black shadow-glow"
-                : "text-gray-400 hover:text-white hover:bg-accent-700"
-              }`}
-            onClick={() => handleChartTypeChange(ct.value)}
-            style={{ minWidth: 62, maxWidth: 96, outline: "none" }}
-          >
-            {ct.label}
-          </button>
-        ))}
-      </div>
+
 
       {error && (
         <div className="bg-danger-500/20 border-b border-danger-500/50 px-4 py-2 text-center">
